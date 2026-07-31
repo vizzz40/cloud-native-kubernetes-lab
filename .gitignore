@@ -1,0 +1,17 @@
+# Terraform working directories
+**/.terraform/*
+
+# State may contain sensitive infrastructure data
+*.tfstate
+*.tfstate.*
+
+# Saved plans
+*.tfplan
+
+# Variable files may contain secrets
+*.tfvars
+*.tfvars.json
+
+# Terraform crash logs
+crash.log
+crash.*.log
