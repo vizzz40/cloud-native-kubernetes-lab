@@ -1,7 +1,7 @@
 variable "aws_region" {
-  description = "AWS region containing the Terraform backend bucket"
+  description = "AWS region containing the Terraform remote backend bucket"
   type        = string
-  default     = "eu-west-1"
+  default     = "eu-central-1"
 }
 
 variable "project_name" {
