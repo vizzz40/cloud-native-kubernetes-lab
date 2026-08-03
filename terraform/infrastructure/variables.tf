@@ -21,3 +21,13 @@ variable "project_name" {
   type        = string
   default     = "k8s-lab"
 }
+
+variable "admin_cidr" {
+  description = "Public IPv4 address allowed to administer the cluster"
+  type        = string
+
+  validation {
+    condition     = can(cidrhost(var.admin_cidr, 0)) && endswith(var.admin_cidr, "/32")
+    error_message = "admin_cidr must be a valid single-host IPv4 CIDR ending in /32."
+  }
+}
