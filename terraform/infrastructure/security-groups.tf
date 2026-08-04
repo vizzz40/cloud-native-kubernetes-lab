@@ -12,7 +12,7 @@ resource "aws_security_group" "cluster" {
   }
 }
 
-//machines that are in the same security group will freely communicate with each other for ease rn
+
 
 resource "aws_vpc_security_group_ingress_rule" "ssh" {
   security_group_id = aws_security_group.cluster.id
@@ -34,12 +34,14 @@ resource "aws_vpc_security_group_ingress_rule" "kubernetes_api" {
   ip_protocol = "tcp"
 }
 
+//machines that are in the same security group will freely communicate with each other for ease rn
+
 resource "aws_vpc_security_group_ingress_rule" "cluster_internal" {
   security_group_id = aws_security_group.cluster.id
   description       = "All private traffic between cluster nodes"
 
   referenced_security_group_id = aws_security_group.cluster.id
-  ip_protocol                 = "-1"
+  ip_protocol                  = "-1" //all protocols all ports -- for the cluster internal comms
 }
 
 //skipping NAT gateway for now
