@@ -43,7 +43,7 @@ variable "instance_type" {
 variable "root_volume_size" {
   description = "Root EBS volume size in GiB"
   type        = number
-  default     = 30 
+  default     = 30
 
   validation {
     condition     = var.root_volume_size >= 20
