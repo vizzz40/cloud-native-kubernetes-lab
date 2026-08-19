@@ -1,0 +1,30 @@
+# pods adrresess are assigned by kubeadm and they come from PodCIDRs
+ipam:
+  mode: kubernetes
+
+k8s:
+  requireIPv4PodCIDR: true
+
+# Cross-node pod networking uses an overlay
+routingMode: tunnel
+tunnelProtocol: vxlan
+
+kubeProxyReplacement: false
+
+
+#generic datapath for now
+bpf:
+  datapathMode: veth
+
+operator:
+  replicas: 1
+
+hubble:
+  enabled: false
+
+# Current cluster is iPv4only.
+ipv4:
+  enabled: true
+
+ipv6:
+  enabled: false
