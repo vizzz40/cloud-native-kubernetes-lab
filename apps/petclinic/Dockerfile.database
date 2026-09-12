@@ -1,0 +1,15 @@
+# Build context: the same pinned REST checkout used for the API image.
+# Required input: a reviewed PostgreSQL 16 image digest, via --build-arg.
+ARG POSTGRES_IMAGE
+FROM ${POSTGRES_IMAGE}
+
+# Add matching table definitions and seed data, not database files or secrets.
+# PostgreSQL runs these in filename order on an empty data directory.
+# Existing databases are not reinitialized; these are not migration scripts.
+COPY src/main/resources/db/postgres/schema.sql \
+     /docker-entrypoint-initdb.d/10-schema.sql
+
+COPY src/main/resources/db/postgres/data.sql \
+     /docker-entrypoint-initdb.d/20-data.sql
+
+# Keep the base image's startup behavior. Supply passwords at runtime.
