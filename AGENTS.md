@@ -41,8 +41,8 @@ Use this learning sequence:
 Do not make the repository owner manually type repetitive configuration merely
 for the sake of typing it.
 
-Codex may scaffold, implement, refactor, document, validate, and automate
-repetitive work, but must explain important architectural decisions.
+The AI assistant may scaffold, implement, refactor, document, validate, and
+automate repetitive work, but must explain important architectural decisions.
 
 Introduce tools only when there is a current problem that justifies them.
 
@@ -112,7 +112,7 @@ Before every push:
 Do not amend, rebase, squash, reset, discard user changes, rewrite history,
 change remotes, or modify repository metadata without explicit approval.
 
-Never add AI, Codex, co-author, signature, or generated-by attribution to
+Never add AI, assistant, co-author, signature, or generated-by attribution to
 commits, source files, or documentation unless the repository owner explicitly
 requests it.
 
