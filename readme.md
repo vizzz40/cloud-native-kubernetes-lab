@@ -5,8 +5,8 @@ Ubuntu, containerd and kubeadm. I use it to understand how cloud infrastructure,
 Linux and Kubernetes fit together, then test those connections with real workloads.
 
 **Implemented:** AWS infrastructure, Kubernetes bootstrap, Helm-managed Cilium
-and cross-node Pod/Service/DNS connectivity. **In progress:** containerizing Spring
-Petclinic before deploying it and adding observability.
+and cross-node Pod/Service/DNS connectivity. **Next:** Hubble flow observability,
+a NetworkPolicy experiment, GitOps with Argo CD, and a lean observability stack.
 
 This is a learning environment, not a production platform or an EKS deployment.
 
@@ -15,7 +15,6 @@ This is a learning environment, not a production platform or an EKS deployment.
 - [AWS infrastructure](terraform/infrastructure/) — networking, compute and access controls.
 - [Cilium configuration](kubernetes/platform/cilium/values.yml) — explicit IPAM and routing choices.
 - [Cross-node networking lab](kubernetes/labs/networking/basic-connectivity.yaml) — client and server pinned to different workers.
-- [Petclinic container builds](apps/petclinic/) — three Dockerfiles and an Nginx reverse proxy; not yet build-validated or deployed.
 - [MySQL OOM investigation](docs/incidents/mysql-5.7-wsl-oom.md) — a separate kind/WSL2 debugging exercise, not an incident on this EC2 cluster.
 
 ## Architecture
@@ -73,8 +72,7 @@ lab checks, not a live uptime guarantee; nodes are stopped between sessions.
 | Kubernetes | kubeadm bootstrap completed; all three nodes previously observed `Ready`. Latest shared runtime details include Kubernetes `1.36.3` and containerd `2.2.1`. |
 | Cilium / Helm | Installed with Helm; the last shared release output reports Cilium `1.20.1`. [Tracked values](kubernetes/platform/cilium/values.yml). |
 | Networking | Cross-node ICMP and direct Pod HTTP passed, followed by ClusterIP HTTP and short/FQDN Service-name HTTP. EndpointSlice matched the server Pod. |
-| Petclinic | [API](apps/petclinic/Dockerfile.api), [web](apps/petclinic/Dockerfile.web), [database](apps/petclinic/Dockerfile.database) build definitions and [proxy configuration](apps/petclinic/nginx.conf) committed. Basic static checks passed; source/image pinning, image builds and Kubernetes deployment remain pending. |
-| Observability / recovery | Hubble, k6, Prometheus, Grafana, OpenTelemetry and controlled failure/recovery exercises are planned, not implemented. |
+| GitOps / observability / recovery | Hubble, Argo CD, k6, Prometheus, Grafana, OpenTelemetry and controlled failure/recovery exercises are planned, not implemented. |
 
 The networking manifest makes the experiment repeatable: a BusyBox client runs
 on worker-1, an Nginx server on worker-2, and a ClusterIP Service selects the server.
@@ -139,8 +137,6 @@ debugging case study, not cloud-cluster validation.
 
 This is not yet a one-command cluster installer. Terraform provisions AWS
 resources; Linux preparation and kubeadm bootstrap were performed manually.
-The Petclinic Dockerfiles require pinned upstream source checkouts as build
-contexts, plus explicit base-image arguments.
 
 For a separate deployment, review the account-specific S3 backend settings in
 both Terraform roots and provide your own inputs using
@@ -153,15 +149,15 @@ approval rules are documented in [AGENTS.md](AGENTS.md).
 
 ## Next milestones
 
-1. Pin source/base-image versions, build Petclinic images and deploy the
-   frontend, Java API and PostgreSQL with an explicit persistence strategy.
-2. Verify browser-to-database request paths; enable Hubble without changing
-   the existing Cilium version or routing model.
-3. Generate bounded traffic with k6, then add metrics and traces through
-   Prometheus, Grafana and OpenTelemetry.
-4. Introduce controlled dependency/network failures, observe symptoms and
-   document recovery, limitations and follow-up actions.
+1. Enable Hubble through the tracked Cilium values, without changing the
+   Cilium version or routing model, and observe flows in the networking lab.
+2. Run a deliberate NetworkPolicy before-and-after experiment and observe both
+   allowed and dropped traffic.
+3. Introduce Argo CD so that platform components are deployed from this
+   repository.
+4. Add a lean observability stack (OpenTelemetry, Prometheus, Grafana, Tempo)
+   with small AI-agent workloads to observe, then introduce controlled
+   failures and document symptoms, recovery and limitations.
 
-Persistent application storage, backup/restore validation, CI/CD and GitOps
-remain future work. New tooling is introduced when it supports a concrete
-experiment, not simply to expand the stack.
+Backup/restore validation and CI remain future work. New tooling is introduced
+when it supports a concrete experiment, not simply to expand the stack.
