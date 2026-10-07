@@ -10,6 +10,19 @@ a NetworkPolicy experiment, GitOps with Argo CD, and a lean observability stack.
 
 This is a learning environment, not a production platform or an EKS deployment.
 
+## What this demonstrates
+
+- **Infrastructure as code:** AWS networking, security groups and EC2 nodes in
+  Terraform, with remote S3 state and native locking.
+- **Self-managed Kubernetes:** kubeadm and containerd on Ubuntu instead of a
+  managed control plane.
+- **Deliberate networking:** Cilium choices (Kubernetes IPAM, VXLAN, kube-proxy
+  retained) kept as Helm values and tested with a cross-node connectivity lab.
+- **Cost awareness:** no NAT Gateway, Elastic IP or managed load balancer, and
+  nodes are stopped between sessions.
+- **Evidence-based documentation:** observed results are kept separate from
+  planned work, and a debugging case study follows the evidence layer by layer.
+
 ## Start here
 
 - [AWS infrastructure](terraform/infrastructure/) — networking, compute and access controls.
